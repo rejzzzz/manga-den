@@ -1,0 +1,31 @@
+---
+import { comics } from "../../data/comics.js";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    return comics.map((comic) => ({
+        params: { id: comic.id },
+        props: { comic },
+    }));
+}
+
+const { comic } = Astro.props;
+---
+
+<BaseLayout title={comic.title}>
+    <h1>{comic.title}</h1>
+    <img src={comic.cover} alt={comic.title} width="200" />
+    <p>{comic.description}</p>
+    <h2>Chapters</h2>
+    <ul>
+        {
+            comic.chapters.map((chapter) => (
+                <li>
+                    <a href={`/read/${comic.id}/${chapter.id}`}>
+                        {chapter.title}
+                    </a>
+                </li>
+            ))
+        }
+    </ul>
+</BaseLayout>

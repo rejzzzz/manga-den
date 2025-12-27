@@ -1,0 +1,32 @@
+---
+import { comics } from "../../../data/comics.js";
+import ComicReader from "../../../components/ComicReader.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+    const paths: {
+        params: { id: string; chapter: string };
+        props: {
+            comic: (typeof comics)[0];
+            chapter: (typeof comics)[0]["chapters"][0];
+        };
+    }[] = [];
+    comics.forEach((comic) => {
+        comic.chapters.forEach((chapter) => {
+            paths.push({
+                params: { id: comic.id, chapter: chapter.id },
+                props: { comic, chapter },
+            });
+        });
+    });
+    return paths;
+}
+
+const { comic, chapter } = Astro.props;
+---
+
+<BaseLayout title={`${comic.title} - ${chapter.title}`}>
+    <h1 style="text-align: center;">{comic.title} - {chapter.title}</h1>
+    <!-- Other content can go here, like navigation, ads, etc. -->
+    <ComicReader pages={chapter.pages} />
+</BaseLayout>

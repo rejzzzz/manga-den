@@ -1,0 +1,48 @@
+---
+const { pages } = Astro.props;
+---
+
+<button
+    id="toggle-load"
+    style="position: fixed; top: 10px; right: 10px; z-index: 1000;"
+    >Load All Pages</button
+>
+<div class="reader">
+    {
+        pages.map((page: string, index: number) => (
+            <img src={page} alt={`Page ${index + 1}`} loading="lazy" />
+        ))
+    }
+</div>
+<script>
+    const button = document.getElementById("toggle-load");
+    let lazy = true;
+    if (button) {
+        button.addEventListener("click", () => {
+        const imgs = document.querySelectorAll(".reader img");
+        if (lazy) {
+            imgs.forEach((img) => ((img as HTMLImageElement).loading = "eager"));
+            button.textContent = "Lazy Load";
+        } else {
+            imgs.forEach((img) => ((img as HTMLImageElement).loading = "lazy"));
+            button.textContent = "Load All Pages";
+        }
+        lazy = !lazy;
+        });
+    }
+</script>
+
+<style>
+    .reader {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+    }
+    img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin-bottom: 10px;
+    }
+</style>
