@@ -4,6 +4,7 @@ export const comics = [
     title: 'Sample Manga 1',
     description: 'A thrilling adventure in a fantasy world.',
     cover: '/images/cover1.jpg',
+    genres: ['adventure', 'action', 'fantasy'],
     chapters: [
       {
         id: '1',
@@ -40,6 +41,7 @@ export const comics = [
     title: 'Sample Manhwa 2',
     description: 'Romance and drama in modern times.',
     cover: '/images/cover2.jpg',
+    genres: ['romance', 'drama'],
     chapters: [
       {
         id: '1',

@@ -1,0 +1,179 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { comics } from "../data/comics.js";
+---
+
+<BaseLayout title="Search">
+    <div class="search-page">
+        <h1>Search Comics</h1>
+        <div class="search-container">
+            <input
+                type="text"
+                id="search-input"
+                placeholder="Search by title..."
+            />
+            <button id="search-btn">Search</button>
+        </div>
+        <div class="filters">
+            <h2>Filter by Genre</h2>
+            <div class="genre-checkboxes">
+                <label
+                    ><input type="checkbox" value="adventure" /> Adventure</label
+                >
+                <label><input type="checkbox" value="action" /> Action</label>
+                <label><input type="checkbox" value="fantasy" /> Fantasy</label>
+                <label><input type="checkbox" value="romance" /> Romance</label>
+                <label><input type="checkbox" value="drama" /> Drama</label>
+                <label><input type="checkbox" value="comedy" /> Comedy</label>
+                <label><input type="checkbox" value="horror" /> Horror</label>
+                <label><input type="checkbox" value="sci-fi" /> Sci-Fi</label>
+                <label><input type="checkbox" value="mystery" /> Mystery</label>
+                <label
+                    ><input type="checkbox" value="thriller" /> Thriller</label
+                >
+            </div>
+        </div>
+        <div id="results"></div>
+    </div>
+
+    <script define:vars={{ comics }}>
+        const input = document.getElementById("search-input");
+        const btn = document.getElementById("search-btn");
+        const results = document.getElementById("results");
+        const checkboxes = document.querySelectorAll(
+            '.genre-checkboxes input[type="checkbox"]',
+        );
+
+        function getSelectedGenres() {
+            const selected = [];
+            checkboxes.forEach((cb) => {
+                if (cb.checked) selected.push(cb.value);
+            });
+            return selected;
+        }
+
+        function displayResults(filtered) {
+            results.innerHTML = "";
+            if (filtered.length === 0) {
+                results.innerHTML = "<p>No results found.</p>";
+                return;
+            }
+            filtered.forEach((comic) => {
+                const div = document.createElement("div");
+                div.className = "result-card";
+                div.innerHTML = `
+                    <h3>${comic.title}</h3>
+                    <p>${comic.description}</p>
+                    <p><strong>Genres:</strong> ${comic.genres.join(", ")}</p>
+                    <a href="/read/${comic.id}/1">Read</a>
+                `;
+                results.appendChild(div);
+            });
+        }
+
+        function filterComics() {
+            const query = input.value.toLowerCase();
+            const selectedGenres = getSelectedGenres();
+            let filtered = comics.filter((comic) =>
+                comic.title.toLowerCase().includes(query),
+            );
+            if (selectedGenres.length > 0) {
+                filtered = filtered.filter((comic) =>
+                    selectedGenres.some((genre) =>
+                        comic.genres.includes(genre),
+                    ),
+                );
+            }
+            displayResults(filtered);
+        }
+
+        btn.addEventListener("click", filterComics);
+
+        input.addEventListener("keyup", (e) => {
+            if (e.key === "Enter") {
+                filterComics();
+            }
+        });
+
+        // Filter on checkbox change
+        checkboxes.forEach((cb) => {
+            cb.addEventListener("change", filterComics);
+        });
+
+        // Initial display all
+        displayResults(comics);
+    </script>
+</BaseLayout>
+
+<style>
+    .search-page {
+        padding: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .search-container {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    #search-input {
+        padding: 10px;
+        width: 300px;
+        border: 1px solid #ccc;
+        /* border-radius: 5px; */
+        background: #111;
+        color: #fff;
+    }
+    #search-btn {
+        padding: 10px 20px;
+        background: #4caf50;
+        color: #fff;
+        border: none;
+        /* border-radius: 5px; */
+        cursor: pointer;
+    }
+    #search-btn:hover {
+        background: #45a049;
+    }
+    .filters {
+        margin-bottom: 20px;
+    }
+    .filters h2 {
+        text-align: center;
+        margin-bottom: 10px;
+    }
+    .genre-checkboxes {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+    .genre-checkboxes label {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #fff;
+    }
+    #results {
+        margin-top: 20px;
+    }
+    .result-card {
+        border: 1px solid #ccc;
+        padding: 15px;
+        margin-bottom: 15px;
+        background: #111;
+        /* border-radius: 5px; */
+    }
+    .result-card h3 {
+        margin: 0 0 10px 0;
+    }
+    .result-card p {
+        color: #ccc;
+        margin: 0 0 10px 0;
+    }
+</style>

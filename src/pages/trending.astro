@@ -5,15 +5,11 @@ import { trendingComics } from "../data/trending.js";
 
 <BaseLayout title="Trending">
     <h1>Trending Comics</h1>
-    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <div class="comics-grid">
         {
             trendingComics.map((comic) => (
-                <div style="border: 1px solid #ccc; padding: 10px; width: 200px;">
-                    <img
-                        src={comic.cover}
-                        alt={comic.title}
-                        style="width: 100%; height: auto;"
-                    />
+                <div class="comic-card">
+                    <img src={comic.cover} alt={comic.title} />
                     <h3>{comic.title}</h3>
                     <p>{comic.description}</p>
                     <a href={`/read/${comic.id}`}>Read More</a>
@@ -22,3 +18,34 @@ import { trendingComics } from "../data/trending.js";
         }
     </div>
 </BaseLayout>
+
+<style>
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .comics-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+    }
+    .comic-card {
+        border: 1px solid #ccc;
+        padding: 10px;
+        width: 200px;
+        background: #111;
+        /* border-radius: 5px; */
+    }
+    .comic-card img {
+        width: 100%;
+        height: auto;
+    }
+    .comic-card h3 {
+        margin: 10px 0;
+    }
+    .comic-card p {
+        font-size: 0.9em;
+        color: #ccc;
+    }
+</style>

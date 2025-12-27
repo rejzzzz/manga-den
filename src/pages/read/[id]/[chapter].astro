@@ -26,7 +26,86 @@ const { comic, chapter } = Astro.props;
 ---
 
 <BaseLayout title={`${comic.title} - ${chapter.title}`}>
-    <h1 style="text-align: center;">{comic.title} - {chapter.title}</h1>
+    <h1>{comic.title} - {chapter.title}</h1>
+    <div class="nav-buttons">
+        <button id="prev-btn">&lt;&lt; Prev</button>
+        <select id="chapter-select"></select>
+        <button id="next-btn">Next &gt;&gt;</button>
+    </div>
     <!-- Other content can go here, like navigation, ads, etc. -->
     <ComicReader pages={chapter.pages} />
 </BaseLayout>
+
+<script
+    define:vars={{
+        chapters: comic.chapters,
+        currentChapterId: chapter.id,
+        comicId: comic.id,
+    }}
+>
+    const select = document.getElementById("chapter-select");
+    const prevBtn = document.getElementById("prev-btn");
+    const nextBtn = document.getElementById("next-btn");
+
+    // Populate chapter select
+    chapters.forEach((ch) => {
+        const option = document.createElement("option");
+        option.value = ch.id;
+        option.textContent = ch.title;
+        if (ch.id === currentChapterId) option.selected = true;
+        select.appendChild(option);
+    });
+
+    // Chapter select change
+    select.addEventListener("change", () => {
+        window.location.href = `/read/${comicId}/${select.value}`;
+    });
+
+    // Prev/Next logic
+    const currentIndex = chapters.findIndex((ch) => ch.id === currentChapterId);
+
+    if (currentIndex > 0) {
+        prevBtn.addEventListener("click", () => {
+            window.location.href = `/read/${comicId}/${chapters[currentIndex - 1].id}`;
+        });
+    } else {
+        prevBtn.disabled = true;
+    }
+
+    if (currentIndex < chapters.length - 1) {
+        nextBtn.addEventListener("click", () => {
+            window.location.href = `/read/${comicId}/${chapters[currentIndex + 1].id}`;
+        });
+    } else {
+        nextBtn.disabled = true;
+    }
+</script>
+
+<style>
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .nav-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+    }
+    .nav-buttons button,
+    .nav-buttons select {
+        padding: 10px;
+        background: #333;
+        color: #fff;
+        border: 1px solid #ccc;
+        /* border-radius: 5px; */
+    }
+    .nav-buttons button:hover:not(:disabled) {
+        background: #555;
+        cursor: pointer;
+    }
+    .nav-buttons button:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+</style>

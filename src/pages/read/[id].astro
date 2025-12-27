@@ -14,10 +14,12 @@ const { comic } = Astro.props;
 
 <BaseLayout title={comic.title}>
     <h1>{comic.title}</h1>
-    <img src={comic.cover} alt={comic.title} width="200" />
-    <p>{comic.description}</p>
+    <div class="comic-info">
+        <img src={comic.cover} alt={comic.title} />
+        <p>{comic.description}</p>
+    </div>
     <h2>Chapters</h2>
-    <ul>
+    <ul class="chapters-list">
         {
             comic.chapters.map((chapter) => (
                 <li>
@@ -29,3 +31,50 @@ const { comic } = Astro.props;
         }
     </ul>
 </BaseLayout>
+
+<style>
+    h1 {
+        text-align: center;
+        margin: 20px 0;
+    }
+    .comic-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    .comic-info img {
+        width: 200px;
+        height: auto;
+        margin-bottom: 10px;
+    }
+    .comic-info p {
+        text-align: center;
+        max-width: 600px;
+    }
+    h2 {
+        text-align: center;
+    }
+    .chapters-list {
+        list-style: none;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    .chapters-list li {
+        margin: 5px 0;
+    }
+    .chapters-list a {
+        display: block;
+        padding: 10px;
+        background: #111;
+        border: 1px solid #ccc;
+        /* border-radius: 5px; */
+        text-align: center;
+        min-width: 200px;
+    }
+    .chapters-list a:hover {
+        background: #222;
+    }
+</style>

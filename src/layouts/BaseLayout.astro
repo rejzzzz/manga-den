@@ -9,11 +9,31 @@ const { title } = Astro.props;
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>{title}</title>
         <style>
+            * {
+                box-sizing: border-box;
+            }
             body {
                 margin: 0;
                 padding: 0;
-                background: #000;
+                background: #3e6878;
                 color: #fff;
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
+                margin-top: 0;
+            }
+            a {
+                color: #4caf50;
+                text-decoration: none;
+            }
+            a:hover {
+                text-decoration: underline;
             }
         </style></head
     >
@@ -21,7 +41,10 @@ const { title } = Astro.props;
     <body style="display: flex; flex-direction: column; min-height: 100vh;">
         <nav style="background: #333; color: #fff; padding: 10px;">
             <a href="/" style="color: #fff; margin-right: 20px;">Home</a>
-            <a href="/trending" style="color: #fff;">Trending</a>
+            <a href="/trending" style="color: #fff; margin-right: 20px;"
+                >Trending</a
+            >
+            <a href="/search" style="color: #fff;">Search</a>
         </nav>
         <div style="flex: 1; padding: 1px; margin: 1px;">
             <slot />
